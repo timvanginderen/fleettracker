@@ -8,4 +8,8 @@
         android:id="@+id/locationListFragment"
         android:name="be.tim.fleettracker.ui.locations.LocationListFragment"
         android:label="LocationListFragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="be.tim.fleettracker.ui.login.LoginFragment"
+        android:label="LoginFragment" />
 </navigation>

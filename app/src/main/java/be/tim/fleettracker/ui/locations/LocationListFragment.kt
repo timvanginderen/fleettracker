@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import be.tim.fleettracker.R
@@ -45,10 +46,16 @@ class LocationListFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val binding = LocationsFragBinding.bind(view)
-        locationsFragBinding = binding
+        // TODO: 22-Nov-20  Check if logged in and redirect to login page when no token present
+        if (false) {
+            val binding = LocationsFragBinding.bind(view)
+            locationsFragBinding = binding
 
-        setupRecyclerView()
+            setupRecyclerView()
+        } else {
+            val navController = findNavController(view)
+            navController.navigate(R.id.loginFragment)
+        }
     }
 
 
