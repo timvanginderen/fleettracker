@@ -8,11 +8,12 @@ import be.tim.fleettracker.data.remote.ApiService
 import be.tim.fleettracker.data.remote.LoginResponse
 import be.tim.fleettracker.data.repository.LocationRepository
 import be.tim.fleettracker.data.repository.LoginRepository
+import be.tim.fleettracker.prefs.AuthPrefManager
 import javax.inject.Inject
 
-class LoginViewModel  @Inject constructor(apiService: ApiService) : ViewModel() {
+class LoginViewModel  @Inject constructor(apiService: ApiService, authPrefManager: AuthPrefManager) : ViewModel() {
 
-    private val loginRepository: LoginRepository = LoginRepository(apiService)
+    private val loginRepository: LoginRepository = LoginRepository(apiService, authPrefManager)
 
     private val loginLiveData = MutableLiveData<Resource<LoginResponse>>()
 
@@ -20,7 +21,7 @@ class LoginViewModel  @Inject constructor(apiService: ApiService) : ViewModel() 
     fun login() {
 //        locationRepository.loadLocations()
 //                .subscribe { resource -> getLocationsLiveData().postValue(resource) }
-        loginRepository.login().subscribe { resource -> getLoginLiveData().postValue(resource) }
+        loginRepository.login("tim@tim.be", "test").subscribe { resource -> getLoginLiveData().postValue(resource) }
     }
 
 
