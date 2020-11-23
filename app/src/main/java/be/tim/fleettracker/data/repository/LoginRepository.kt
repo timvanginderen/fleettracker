@@ -39,20 +39,17 @@ class LoginRepository(
             }
 
             override fun createCall(): Observable<Resource<LoginResponse>> {
-//                return locationApiService.getLocations()
-//                        .flatMap { response ->
-//                            Observable.just(
-//                                    if (response == null) Resource.error("", emptyList<LocationEntity>())
-//                                    else Resource.success(response)
-//                            )
-//                        }
                 return apiService.login().flatMap { response -> Observable.just(
                         Resource.success(response)
-                ).onErrorReturnItem(
-                        Resource.error("observer error", LoginResponse()))}
-//                        .onErrorReturn { t: Throwable -> Log.d(TAG, t.message.toString()) }
-                        .doOnError { t: Throwable? -> Log.d(TAG, t!!.message.toString())
-                        }
+                )}
+                .onErrorReturn { t: Throwable ->
+                        Resource.error(t.message.toString(), null)
+                }
+                // Only using .doOnError logs error
+
+//                .doOnError { t: Throwable? ->
+//                    Log.d(TAG, t!!.message.toString())
+//                }
             }
         }.getAsObservable()
     }
