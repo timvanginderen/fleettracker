@@ -38,7 +38,8 @@ class HomeFragment : BaseFragment() {
             // TODO: 24-Nov-20 setup data binding
         } else {
             // Go to login screen
-            Navigation.findNavController(view).navigate(R.id.loginFragment)
+            val actionToLogin = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
+            Navigation.findNavController(view).navigate(actionToLogin)
         }
     }
 
