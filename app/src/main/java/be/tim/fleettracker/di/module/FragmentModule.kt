@@ -1,5 +1,6 @@
 package be.tim.fleettracker.di.module
 
+import be.tim.fleettracker.ui.home.HomeFragment
 import be.tim.fleettracker.ui.locations.LocationListFragment
 import be.tim.fleettracker.ui.login.LoginFragment
 import dagger.Module
@@ -13,5 +14,8 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector
     abstract fun contributeLoginFragment(): LoginFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeHomeFragment(): HomeFragment
 
 }

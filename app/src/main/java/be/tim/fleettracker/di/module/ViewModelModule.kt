@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import be.tim.fleettracker.ui.locations.LocationListViewModel
 import be.tim.fleettracker.factory.ViewModelFactory
+import be.tim.fleettracker.ui.home.HomeViewModel
 import be.tim.fleettracker.ui.login.LoginViewModel
 import dagger.Binds
 import dagger.Module
@@ -36,4 +37,10 @@ internal abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(LoginViewModel::class)
     protected abstract fun loginViewModel(loginViewModel: LoginViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(HomeViewModel::class)
+    protected abstract fun homeViewModel(homeViewModel: HomeViewModel): ViewModel
+
 }

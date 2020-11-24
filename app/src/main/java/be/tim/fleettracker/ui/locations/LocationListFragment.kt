@@ -24,7 +24,7 @@ class LocationListFragment : BaseFragment() {
     @Inject
     internal lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var locationListViewModel: LocationListViewModel
+    private lateinit var locationListViewModel: LocationListViewModel
 
     private lateinit var locationsFragBinding: LocationsFragBinding
     private lateinit var rvLocations : RecyclerView

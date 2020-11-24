@@ -14,17 +14,16 @@ import javax.inject.Inject
 class LoginViewModel  @Inject constructor(apiService: ApiService, authPrefManager: AuthPrefManager) : ViewModel() {
 
     private val loginRepository: LoginRepository = LoginRepository(apiService, authPrefManager)
-
     private val loginLiveData = MutableLiveData<Resource<LoginResponse>>()
 
+    fun getLoginLiveData() = loginLiveData
 
     fun login() {
-//        locationRepository.loadLocations()
-//                .subscribe { resource -> getLocationsLiveData().postValue(resource) }
-        loginRepository.login("timo@tim.be", "test12345").subscribe { resource -> getLoginLiveData().postValue(resource) }
+        loginRepository.login("timo@tim.be", "test12345").subscribe {
+            resource -> getLoginLiveData().postValue(resource)
+        }
     }
 
 
-    fun getLoginLiveData() = loginLiveData
 
 }
