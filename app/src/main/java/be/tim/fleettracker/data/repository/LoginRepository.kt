@@ -6,13 +6,15 @@ import be.tim.fleettracker.data.Resource
 import be.tim.fleettracker.data.remote.ApiService
 import be.tim.fleettracker.data.remote.LoginRequest
 import be.tim.fleettracker.data.remote.LoginResponse
+import be.tim.fleettracker.prefs.AuthPrefManager
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import javax.inject.Singleton
 
 @Singleton
 class LoginRepository(
-        private val apiService: ApiService
+        private val apiService: ApiService,
+        private val authPrefManager: AuthPrefManager
 ) {
 
     private val TAG = LoginRepository::class.qualifiedName
@@ -25,6 +27,7 @@ class LoginRepository(
 //                locationDao.insertLocations(item)
                 // TODO: 22-Nov-20  save token in shared prefs
                 Log.d(TAG, "Saving token: ${item.token}")
+                authPrefManager.saveAuthToken(item.token)
             }
 
             override fun shouldFetch(): Boolean {

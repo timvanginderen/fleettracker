@@ -21,7 +21,7 @@ class LoginViewModel  @Inject constructor(apiService: ApiService, authPrefManage
     fun login() {
 //        locationRepository.loadLocations()
 //                .subscribe { resource -> getLocationsLiveData().postValue(resource) }
-        loginRepository.login("tim@tim.be", "test").subscribe { resource -> getLoginLiveData().postValue(resource) }
+        loginRepository.login("timo@tim.be", "test12345").subscribe { resource -> getLoginLiveData().postValue(resource) }
     }
 
 
