@@ -94,6 +94,9 @@ class ForegroundOnlyLocationService : Service() {
                     // if a Notification is created (when the user navigates away from app).
                     currentLocation = locationResult.lastLocation
 
+
+                    // TODO: 26-Nov-20 save location and upload
+
                     // Notify our Activity that a new location was added. Again, if this was a
                     // production app, the Activity would be listening for changes to a database
                     // with new locations, but we are simplifying things a bit to focus on just
@@ -190,7 +193,6 @@ class ForegroundOnlyLocationService : Service() {
         startService(Intent(applicationContext, ForegroundOnlyLocationService::class.java))
 
         try {
-            // TODO: Step 1.5, Subscribe to location changes.
             fusedLocationProviderClient.requestLocationUpdates(
                     locationRequest, locationCallback, Looper.myLooper())
         } catch (unlikely: SecurityException) {

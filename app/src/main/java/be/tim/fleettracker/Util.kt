@@ -20,7 +20,7 @@ fun Location?.toText():String {
  */
 internal object SharedPreferenceUtil {
 
-    private const val KEY_FOREGROUND_ENABLED = "tracking_foreground_location"
+    const val KEY_FOREGROUND_ENABLED = "tracking_foreground_location"
 
     /**
      * Returns true if requesting location updates, otherwise returns false.
