@@ -9,7 +9,7 @@ import retrofit2.http.POST
 
 interface ApiService {
 
-    @GET(Constants.TODOS_ENDPOINT)
+    @GET(Constants.LOGIN_ENDPOINT)
     fun getLocations() : Observable<List<LocationEntity>>
 
     @POST(Constants.LOGIN_ENDPOINT)
