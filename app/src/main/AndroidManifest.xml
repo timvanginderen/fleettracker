@@ -5,6 +5,12 @@
     <!--Internet Permission-->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Required for foreground services on P+. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <!-- Exact location permission -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <application
         android:name="be.tim.fleettracker.AppController"
         android:allowBackup="true"
