@@ -5,11 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import be.tim.fleettracker.R
-import be.tim.fleettracker.databinding.LocationsFragBinding
 import be.tim.fleettracker.databinding.LoginFragBinding
 import be.tim.fleettracker.ui.BaseFragment
 import dagger.android.support.AndroidSupportInjection
@@ -55,13 +55,14 @@ class LoginFragment : BaseFragment() {
             if (resource!!.isLoading) {
                 // TODO: implement progress indicator
             } else if (resource.data != null) {
-                Log.d(TAG, "Login success")
-
-            } else {
-                // TODO: 14-Nov-20 handle error
-                Log.e(TAG, "Login error with msg: ${resource.message}")
+                if (resource.data.token != null) {
+                    Log.d(TAG, "Login success")
+                } else {
+                    val errorMessage = "Login error with msg: ${resource.message}"
+                    Log.e(TAG, errorMessage)
+                    Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                }
             }
-
         })
     }
 

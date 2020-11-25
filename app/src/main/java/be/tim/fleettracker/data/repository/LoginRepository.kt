@@ -25,7 +25,9 @@ class LoginRepository(
             override fun saveCallResult(item: LoginResponse) {
                 // Save token in shared prefs
                 Log.d(TAG, "Saving token: ${item.token}")
-                authPrefManager.saveAuthToken(item.token)
+                if (item.token != null) {
+                    authPrefManager.saveAuthToken(item.token!!)
+                }
             }
 
             override fun shouldFetch(): Boolean {
@@ -33,9 +35,8 @@ class LoginRepository(
             }
 
             override fun loadFromDb(): Flowable<LoginResponse> {
-                val l = LoginResponse()
-                l.token = authPrefManager.getAuthToken().let { "$it" }
-                return Flowable.just(l)
+                val authToken = authPrefManager.getAuthToken()
+                return Flowable.just(LoginResponse(authToken))
             }
 
             override fun createCall(): Observable<Resource<LoginResponse>> {
@@ -45,11 +46,7 @@ class LoginRepository(
 
                 return apiService.login(loginRequest).flatMap { response -> Observable.just(
                         Resource.success(response)
-                )
-                // TODO: 25-Nov-20 Fix passing rx/retrofit errors to vm
-                .onErrorReturnItem(
-                        Resource.error("observer error", LoginResponse()))}
-                .doOnError { t: Throwable? -> Log.d(TAG, t!!.message.toString()) }
+                ) }.doOnError { t: Throwable? -> Log.d(TAG, t!!.message.toString()) }
             }
         }.getAsObservable()
     }
