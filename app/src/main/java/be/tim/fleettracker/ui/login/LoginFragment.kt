@@ -63,7 +63,6 @@ class LoginFragment : BaseFragment() {
             }
 
         })
-//        loginViewModel.login()
     }
 
 }

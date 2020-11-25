@@ -23,9 +23,7 @@ class LoginRepository(
         return object : NetworkBoundResource<LoginResponse, LoginResponse>() {
 
             override fun saveCallResult(item: LoginResponse) {
-//                Log.d(TAG, "Insert ${item.size} todos into db")
-//                locationDao.insertLocations(item)
-                // TODO: 22-Nov-20  save token in shared prefs
+                // Save token in shared prefs
                 Log.d(TAG, "Saving token: ${item.token}")
                 authPrefManager.saveAuthToken(item.token)
             }
@@ -35,11 +33,9 @@ class LoginRepository(
             }
 
             override fun loadFromDb(): Flowable<LoginResponse> {
-//                val locationEntities = locationDao.getLocations()
-//                return if (locationEntities == null || locationEntities.isEmpty()) {
-//                    Flowable.empty()
-//                } else Flowable.just(locationEntities)
-                return Flowable.empty()
+                val l = LoginResponse()
+                l.token = authPrefManager.getAuthToken().let { "$it" }
+                return Flowable.just(l)
             }
 
             override fun createCall(): Observable<Resource<LoginResponse>> {
@@ -49,9 +45,10 @@ class LoginRepository(
 
                 return apiService.login(loginRequest).flatMap { response -> Observable.just(
                         Resource.success(response)
-                ).onErrorReturnItem(
+                )
+                // TODO: 25-Nov-20 Fix passing rx/retrofit errors to vm
+                .onErrorReturnItem(
                         Resource.error("observer error", LoginResponse()))}
-//                .onErrorReturn { t: Throwable -> Log.d(TAG, t.message.toString()) }
                 .doOnError { t: Throwable? -> Log.d(TAG, t!!.message.toString()) }
             }
         }.getAsObservable()
