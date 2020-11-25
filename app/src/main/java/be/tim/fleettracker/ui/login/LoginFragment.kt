@@ -61,9 +61,7 @@ class LoginFragment : BaseFragment() {
             } else if (resource.data != null) {
                 if (resource.data.token != null) {
                     Log.d(TAG, "Login success")
-                    // Go to home screen
-                    val actionToHome = LoginFragmentDirections.actionLoginFragmentToHomeFragment()
-                    navController.navigate(actionToHome)
+                    navController.navigateUp()
                 } else if (resource.message != null) {
                     val errorMessage = "Login error with msg: ${resource.message}"
                     showError(errorMessage)
