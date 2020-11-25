@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import be.tim.fleettracker.R
+import be.tim.fleettracker.databinding.LocationsFragBinding
+import be.tim.fleettracker.databinding.LoginFragBinding
 import be.tim.fleettracker.ui.BaseFragment
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -22,8 +24,7 @@ class LoginFragment : BaseFragment() {
 
     lateinit var loginViewModel: LoginViewModel
 
-//    private lateinit var locationsFragBinding: LocationsFragBinding
-//    private lateinit var loginfr: Loginfr
+    private lateinit var loginFragBinding: LoginFragBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +43,9 @@ class LoginFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val binding = LocationsFragBinding.bind(view)
-//        locationsFragBinding = binding
+        val binding = LoginFragBinding.bind(view)
+        loginFragBinding = binding
+        loginFragBinding.viewmodel = loginViewModel
     }
 
     private fun initialiseViewModel() {
@@ -61,7 +63,7 @@ class LoginFragment : BaseFragment() {
             }
 
         })
-        loginViewModel.login()
+//        loginViewModel.login()
     }
 
 }
