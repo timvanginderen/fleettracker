@@ -47,11 +47,15 @@ class LoginFragment : BaseFragment() {
 
         val binding = LoginFragBinding.bind(view)
         loginFragBinding = binding
+        loginFragBinding.viewmodel = loginViewModel
+        navController = Navigation.findNavController(view)
+
+        initUI()
+    }
+
+    private fun initUI() {
         loginViewModel.email = "timo@tim.be"
         loginViewModel.password = "test12345"
-        loginFragBinding.viewmodel = loginViewModel
-
-        navController = Navigation.findNavController(view)
     }
 
     private fun initialiseViewModel() {
@@ -59,8 +63,9 @@ class LoginFragment : BaseFragment() {
                 LoginViewModel::class.java)
         loginViewModel.getLoginLiveData().observe(this, Observer { resource ->
             if (resource!!.isLoading) {
-                // TODO: implement progress indicator
+                loginViewModel.isLoadingLogin.set(true)
             } else if (resource.data != null) {
+                loginViewModel.isLoadingLogin.set(false)
                 if (resource.data.token != null) {
                     Log.d(TAG, "Login success")
                     navController.navigateUp()
