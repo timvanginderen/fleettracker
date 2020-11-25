@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import be.tim.fleettracker.R
 import be.tim.fleettracker.databinding.LoginFragBinding
 import be.tim.fleettracker.ui.BaseFragment
@@ -22,9 +24,9 @@ class LoginFragment : BaseFragment() {
     @Inject
     internal lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var loginViewModel: LoginViewModel
-
+    private lateinit var loginViewModel: LoginViewModel
     private lateinit var loginFragBinding: LoginFragBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +48,8 @@ class LoginFragment : BaseFragment() {
         val binding = LoginFragBinding.bind(view)
         loginFragBinding = binding
         loginFragBinding.viewmodel = loginViewModel
+
+        navController = Navigation.findNavController(view)
     }
 
     private fun initialiseViewModel() {
@@ -57,13 +61,22 @@ class LoginFragment : BaseFragment() {
             } else if (resource.data != null) {
                 if (resource.data.token != null) {
                     Log.d(TAG, "Login success")
-                } else {
+                    // Go to home screen
+                    val actionToHome = LoginFragmentDirections.actionLoginFragmentToHomeFragment()
+                    navController.navigate(actionToHome)
+                } else if (resource.message != null) {
                     val errorMessage = "Login error with msg: ${resource.message}"
-                    Log.e(TAG, errorMessage)
-                    Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                    showError(errorMessage)
+                } else {
+                    showError("Unknown error")
                 }
             }
         })
+    }
+
+    private fun showError(errorMessage: String) {
+        Log.e(TAG, errorMessage)
+        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
     }
 
 }
