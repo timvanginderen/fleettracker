@@ -47,6 +47,8 @@ class LoginFragment : BaseFragment() {
 
         val binding = LoginFragBinding.bind(view)
         loginFragBinding = binding
+        loginViewModel.email = "timo@tim.be"
+        loginViewModel.password = "test12345"
         loginFragBinding.viewmodel = loginViewModel
 
         navController = Navigation.findNavController(view)

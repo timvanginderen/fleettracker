@@ -40,10 +40,7 @@ class LoginRepository(
             }
 
             override fun createCall(): Observable<Resource<LoginResponse>> {
-                val loginRequest = LoginRequest()
-                loginRequest.email = email
-                loginRequest.password = password
-
+                val loginRequest = LoginRequest(email, password)
                 return apiService.login(loginRequest).flatMap { response -> Observable.just(
                         Resource.success(response)
                 ) }.doOnError { t: Throwable? -> Log.d(TAG, t!!.message.toString()) }

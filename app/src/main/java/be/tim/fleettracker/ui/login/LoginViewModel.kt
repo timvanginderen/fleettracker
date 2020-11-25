@@ -16,10 +16,13 @@ class LoginViewModel  @Inject constructor(apiService: ApiService, authPrefManage
     private val loginRepository: LoginRepository = LoginRepository(apiService, authPrefManager)
     private val loginLiveData = MutableLiveData<Resource<LoginResponse>>()
 
+    lateinit var email: String
+    lateinit var password: String
+
     fun getLoginLiveData() = loginLiveData
 
     fun login() {
-        loginRepository.login("timo@tim.be", "test12345").subscribe {
+        loginRepository.login(email, password).subscribe {
             resource -> getLoginLiveData().postValue(resource)
         }
     }
