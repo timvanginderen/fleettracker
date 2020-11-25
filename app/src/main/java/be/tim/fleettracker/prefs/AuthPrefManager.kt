@@ -21,4 +21,8 @@ class AuthPrefManager (context: Context) {
     fun getAuthToken(): String? {
         return prefs.getString(USER_TOKEN, null)
     }
+
+    fun isLoggedIn(): Boolean {
+        return getAuthToken() != null
+    }
 }

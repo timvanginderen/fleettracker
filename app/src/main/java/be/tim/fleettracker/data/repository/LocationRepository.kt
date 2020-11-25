@@ -29,11 +29,6 @@ class LocationRepository(
      * that class. That class is based on LiveData but here we are 
      * using Observable from RxJava.
      * 
-     * There are three methods called:
-     * a. fetch data from server
-     * b. fetch data from local
-     * c. save data from api in local
-     * 
      * So basically we fetch data from server, store it locally
      * and then fetch data from local and update the UI with 
      * this data.
