@@ -101,7 +101,6 @@ class ForegroundOnlyLocationService() : Service() {
 
                 Log.d(TAG, "onLocationResult callback")
 
-
                 // TODO: 26-Nov-20 upload strategy
                 // Save last locations
                 if (locationResult!= null && locationResult.locations.size > 0) {
@@ -111,7 +110,7 @@ class ForegroundOnlyLocationService() : Service() {
                 }
 
                 if (locationResult?.lastLocation != null) {
-
+                    // TODO: 26-Nov-20 replace all lastLocation logic and fetch from db instead
                     // Normally, you want to save a new location to a database. We are simplifying
                     // things a bit and just saving it as a local variable, as we only need it again
                     // if a Notification is created (when the user navigates away from app).

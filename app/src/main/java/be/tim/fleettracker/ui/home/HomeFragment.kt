@@ -13,18 +13,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import be.tim.fleettracker.BuildConfig
 import be.tim.fleettracker.ForegroundOnlyLocationService
 import be.tim.fleettracker.R
 import be.tim.fleettracker.databinding.HomeFragBinding
 import be.tim.fleettracker.prefs.KEY_FOREGROUND_ENABLED
-import be.tim.fleettracker.toText
 import be.tim.fleettracker.ui.BaseFragment
+import be.tim.fleettracker.ui.locations.LocationsAdapter
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -95,6 +99,9 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
 
     private lateinit var homeViewModel: HomeViewModel
 
+    private lateinit var rvLocations : RecyclerView
+
+
     // Monitors connection to the while-in-use service.
     private val foregroundOnlyServiceConnection = object : ServiceConnection {
 
@@ -139,6 +146,8 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
         homeFragBinding = binding
         homeFragBinding.lifecycleOwner = this
         homeFragBinding.viewmodel = homeViewModel
+
+        setupRecyclerView()
 
         foregroundOnlyLocationButton = view.findViewById(R.id.foreground_only_location_button)
 
@@ -206,6 +215,36 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
 
     private fun initialiseViewModel() {
         homeViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel::class.java)
+        homeViewModel.getLocationsLiveData().observe(this, Observer { resource ->
+            if (resource.isLoading) {
+
+            } else if (resource.data != null) {
+                if (resource.data.isEmpty() && !resource.message.isNullOrEmpty()) {
+                    showError(resource.message)
+                } else {
+                    Log.d(TAG, "Get locations success: loaded ${resource.data.size} items")
+
+                    val adapter = LocationsAdapter(resource.data)
+                    rvLocations.adapter = adapter
+                }
+            } else {
+                showError("Error: ${resource.message}")
+            }
+        })
+        homeViewModel.loadLocations()
+    }
+
+    private fun showError(errorMessage: String) {
+        Log.e(TAG, errorMessage)
+        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+    }
+
+    private fun setupRecyclerView() {
+        rvLocations = homeFragBinding.rvLocations
+        rvLocations.layoutManager = LinearLayoutManager(context)
+
+        val adapter = LocationsAdapter(emptyList())
+        rvLocations.adapter = adapter
     }
 
     private fun foregroundPermissionApproved(): Boolean {
@@ -308,7 +347,8 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
             )
 
             if (location != null) {
-                homeViewModel.addToLogResults("Foreground location: ${location.toText()}")
+                // Refresh list data
+                homeViewModel.loadLocations()
             }
         }
     }
