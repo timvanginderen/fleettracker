@@ -13,7 +13,6 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import be.tim.fleettracker.data.local.dao.LocationDao
-import be.tim.fleettracker.data.local.entity.LocationEntity
 import be.tim.fleettracker.prefs.LocationPrefManager
 import com.google.android.gms.location.*
 import dagger.android.AndroidInjection
@@ -100,14 +99,14 @@ class ForegroundOnlyLocationService() : Service() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
 
-                // TODO: 26-Nov-20 save locations and upload
+                Log.d(TAG, "onLocationResult callback")
+
+
+                // TODO: 26-Nov-20 upload strategy
                 // Save last locations
                 if (locationResult!= null && locationResult.locations.size > 0) {
                     for (l in locationResult.locations) {
-                        // TODO: 26-Nov-20 create converter
-                        val entity = LocationEntity(0, l.provider, l.accuracy, l.latitude, l.longitude,
-                                l.speed, l.time, l.bearing)
-                        locationDao.insertLocation(entity)
+                        locationDao.insertLocation(l.toLocationEntity())
                     }
                 }
 
