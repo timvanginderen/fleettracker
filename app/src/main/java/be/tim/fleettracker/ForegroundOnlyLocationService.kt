@@ -85,7 +85,7 @@ class ForegroundOnlyLocationService() : Service() {
 
             // Sets the maximum time when batched location updates are delivered. Updates may be
             // delivered sooner than this interval.
-            maxWaitTime = TimeUnit.MINUTES.toMillis(2)
+            maxWaitTime = TimeUnit.MINUTES.toMillis(1)
 
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }

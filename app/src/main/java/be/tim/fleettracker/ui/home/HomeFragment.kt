@@ -13,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -22,6 +21,7 @@ import androidx.navigation.Navigation
 import be.tim.fleettracker.BuildConfig
 import be.tim.fleettracker.ForegroundOnlyLocationService
 import be.tim.fleettracker.R
+import be.tim.fleettracker.databinding.HomeFragBinding
 import be.tim.fleettracker.prefs.KEY_FOREGROUND_ENABLED
 import be.tim.fleettracker.toText
 import be.tim.fleettracker.ui.BaseFragment
@@ -88,8 +88,7 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
 
     private lateinit var foregroundOnlyLocationButton: Button
 
-    private lateinit var outputTextView: TextView
-
+    private lateinit var homeFragBinding: HomeFragBinding
 
     @Inject
     internal lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -128,7 +127,19 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        outputTextView = view.findViewById(R.id.output_text_view)
+        if (!homeViewModel.isLoggedIn()) {
+            // Go to login screen
+            val actionToLogin = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
+            Navigation.findNavController(view).navigate(actionToLogin)
+            return
+        }
+
+        // Setup binding
+        val binding = HomeFragBinding.bind(view)
+        homeFragBinding = binding
+        homeFragBinding.lifecycleOwner = this
+        homeFragBinding.viewmodel = homeViewModel
+
         foregroundOnlyLocationButton = view.findViewById(R.id.foreground_only_location_button)
 
         foregroundOnlyLocationButton.setOnClickListener {
@@ -143,15 +154,6 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
                     requestForegroundPermissions()
                 }
             }
-        }
-
-
-        if (homeViewModel.isLoggedIn()) {
-            // TODO: 24-Nov-20 setup data binding
-        } else {
-            // Go to login screen
-            val actionToLogin = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
-            Navigation.findNavController(view).navigate(actionToLogin)
         }
     }
 
@@ -296,11 +298,6 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
         }
     }
 
-    private fun logResultsToScreen(output:String) {
-        val outputWithPreviousLogs = "$output\n${outputTextView.text}"
-        outputTextView.text = outputWithPreviousLogs
-    }
-
     /**
      * Receiver for location broadcasts from [ForegroundOnlyLocationService].
      */
@@ -312,7 +309,7 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
             )
 
             if (location != null) {
-                logResultsToScreen("Foreground location: ${location.toText()}")
+                homeViewModel.addToLogResults("Foreground location: ${location.toText()}")
             }
         }
     }

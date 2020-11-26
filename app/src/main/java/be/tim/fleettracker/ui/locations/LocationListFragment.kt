@@ -47,6 +47,7 @@ class LocationListFragment : BaseFragment() {
 
         val binding = LocationsFragBinding.bind(view)
         locationsFragBinding = binding
+        locationsFragBinding.lifecycleOwner = this
 
         setupRecyclerView()
     }
