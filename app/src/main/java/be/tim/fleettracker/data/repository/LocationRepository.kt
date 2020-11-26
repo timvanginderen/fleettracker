@@ -38,12 +38,13 @@ class LocationRepository(
         return object : NetworkBoundResource<List<LocationEntity>, List<LocationEntity>>() {
 
             override fun saveCallResult(item: List<LocationEntity>) {
-                Log.d(TAG, "Insert ${item.size} todos into db")
+                Log.d(TAG, "Insert ${item.size} locations into db")
                 locationDao.insertLocations(item)
             }
 
             override fun shouldFetch(): Boolean {
-                return true
+                // TODO: 26-Nov-20  implement
+                return false
             }
 
             override fun loadFromDb(): Flowable<List<LocationEntity>> {

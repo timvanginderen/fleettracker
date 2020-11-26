@@ -47,6 +47,7 @@ class LoginFragment : BaseFragment() {
 
         val binding = LoginFragBinding.bind(view)
         loginFragBinding = binding
+        loginFragBinding.lifecycleOwner = this
         loginFragBinding.viewmodel = loginViewModel
         navController = Navigation.findNavController(view)
 

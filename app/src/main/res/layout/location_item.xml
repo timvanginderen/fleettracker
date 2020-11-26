@@ -14,14 +14,14 @@
         android:layout_margin="16dp">
 
         <TextView
-            android:id="@+id/tv_todo_title"
+            android:id="@+id/tv_location_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@{location.title}" />
+            android:text="@{Long.toString(location.time)}" />
 
         <TextView
-            android:id="@+id/tv_todo_id"
+            android:id="@+id/tv_location_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

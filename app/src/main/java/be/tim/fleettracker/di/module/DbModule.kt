@@ -20,7 +20,7 @@ class DbModule {
 
     @Provides
     @Singleton
-    internal fun provideMovieDao(appDatabase: AppDatabase): LocationDao {
+    internal fun provideLocationDao(appDatabase: AppDatabase): LocationDao {
         return appDatabase.locationDao()
     }
 }

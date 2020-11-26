@@ -3,7 +3,6 @@ package be.tim.fleettracker.di
 import android.app.Application
 import be.tim.fleettracker.AppController
 import be.tim.fleettracker.di.module.*
-import be.tim.fleettracker.di.module.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
@@ -11,9 +10,9 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-    modules = [ApiModule::class, DbModule::class,
+    modules = [ApiModule::class, DbModule::class, LocationModule::class,
         ViewModelModule::class, AndroidSupportInjectionModule::class,
-        ActivityModule::class, FragmentModule::class]
+        ActivityModule::class, ServiceModule::class, FragmentModule::class]
 )
 
 interface AppComponent {
@@ -28,6 +27,9 @@ interface AppComponent {
 
         @BindsInstance
         fun dbModule(dbModule: DbModule): Builder
+
+        @BindsInstance
+        fun locationModule(locationModule: LocationModule): Builder
 
         fun build(): AppComponent
     }
