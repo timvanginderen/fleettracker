@@ -19,7 +19,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.Navigation
-import be.tim.fleettracker.*
+import be.tim.fleettracker.BuildConfig
+import be.tim.fleettracker.ForegroundOnlyLocationService
+import be.tim.fleettracker.R
+import be.tim.fleettracker.prefs.KEY_FOREGROUND_ENABLED
+import be.tim.fleettracker.toText
 import be.tim.fleettracker.ui.BaseFragment
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.AndroidSupportInjection
@@ -128,8 +132,10 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
         foregroundOnlyLocationButton = view.findViewById(R.id.foreground_only_location_button)
 
         foregroundOnlyLocationButton.setOnClickListener {
-            val enabled = sharedPreferences.getBoolean(
-                SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
+//            val enabled = sharedPreferences.getBoolean(
+//                SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
+
+            val enabled = homeViewModel.getLocationTrackingPref()
 
             if (enabled) {
                 foregroundOnlyLocationService?.unsubscribeToLocationUpdates()
@@ -157,7 +163,7 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
         super.onStart()
 
         updateButtonState(
-            sharedPreferences.getBoolean(SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
+            homeViewModel.getLocationTrackingPref()
         )
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
 
@@ -193,9 +199,10 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         // Updates button states if new while in use location is added to SharedPreferences.
-        if (key == SharedPreferenceUtil.KEY_FOREGROUND_ENABLED) {
-            updateButtonState(sharedPreferences.getBoolean(
-                SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
+        if (key == KEY_FOREGROUND_ENABLED) {
+            updateButtonState(
+//                sharedPreferences.getBoolean(SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
+                homeViewModel.getLocationTrackingPref()
             )
         }
     }
