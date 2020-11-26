@@ -204,7 +204,6 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
         }
     }
 
-
     private fun initialiseViewModel() {
         homeViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel::class.java)
     }

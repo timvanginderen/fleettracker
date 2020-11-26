@@ -12,6 +12,8 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import be.tim.fleettracker.data.local.dao.LocationDao
+import be.tim.fleettracker.data.local.entity.LocationEntity
 import be.tim.fleettracker.prefs.LocationPrefManager
 import com.google.android.gms.location.*
 import dagger.android.AndroidInjection
@@ -57,6 +59,9 @@ class ForegroundOnlyLocationService() : Service() {
     @Inject
     lateinit var locationPrefManager : LocationPrefManager
 
+    @Inject
+    lateinit var locationDao: LocationDao
+
     override fun onCreate() {
         Log.d(TAG, "onCreate()")
 
@@ -95,6 +100,17 @@ class ForegroundOnlyLocationService() : Service() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
 
+                // TODO: 26-Nov-20 save locations and upload
+                // Save last locations
+                if (locationResult!= null && locationResult.locations.size > 0) {
+                    for (l in locationResult.locations) {
+                        // TODO: 26-Nov-20 create converter
+                        val entity = LocationEntity(0, l.provider, l.accuracy, l.latitude, l.longitude,
+                                l.speed, l.time, l.bearing)
+                        locationDao.insertLocation(entity)
+                    }
+                }
+
                 if (locationResult?.lastLocation != null) {
 
                     // Normally, you want to save a new location to a database. We are simplifying
@@ -102,8 +118,6 @@ class ForegroundOnlyLocationService() : Service() {
                     // if a Notification is created (when the user navigates away from app).
                     currentLocation = locationResult.lastLocation
 
-
-                    // TODO: 26-Nov-20 save location and upload
 
                     // Notify our Activity that a new location was added. Again, if this was a
                     // production app, the Activity would be listening for changes to a database
