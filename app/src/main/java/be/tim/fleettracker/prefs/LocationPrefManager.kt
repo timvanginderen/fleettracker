@@ -10,7 +10,7 @@ const val KEY_FOREGROUND_ENABLED = "tracking_foreground_location"
 class LocationPrefManager(context: Context) {
 
     private var prefs: SharedPreferences = context.getSharedPreferences(
-        context.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        context.getString(R.string.location_preference_file_key), Context.MODE_PRIVATE)
 
     /**
      * Returns true if requesting location updates, otherwise returns false.

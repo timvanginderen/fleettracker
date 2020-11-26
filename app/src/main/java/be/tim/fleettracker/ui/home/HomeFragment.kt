@@ -118,7 +118,7 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
 
         foregroundOnlyBroadcastReceiver = ForegroundOnlyBroadcastReceiver()
         sharedPreferences =
-            activity!!.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+            activity!!.getSharedPreferences(getString(R.string.location_preference_file_key), Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -132,11 +132,7 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
         foregroundOnlyLocationButton = view.findViewById(R.id.foreground_only_location_button)
 
         foregroundOnlyLocationButton.setOnClickListener {
-//            val enabled = sharedPreferences.getBoolean(
-//                SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
-
             val enabled = homeViewModel.getLocationTrackingPref()
-
             if (enabled) {
                 foregroundOnlyLocationService?.unsubscribeToLocationUpdates()
             } else {
@@ -201,7 +197,6 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
         // Updates button states if new while in use location is added to SharedPreferences.
         if (key == KEY_FOREGROUND_ENABLED) {
             updateButtonState(
-//                sharedPreferences.getBoolean(SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
                 homeViewModel.getLocationTrackingPref()
             )
         }

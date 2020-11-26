@@ -27,7 +27,6 @@ import javax.inject.Inject
  * versions. Please reference documentation for details.
  */
 class ForegroundOnlyLocationService() : Service() {
-//@Inject constructor(private var locationPrefManager: LocationPrefManager): Service() {
     /*
      * Checks whether the bound activity has really gone away (foreground service with notification
      * created) or simply orientation change (no-op).
@@ -54,7 +53,6 @@ class ForegroundOnlyLocationService() : Service() {
     // database, but because this is a simplified sample without a full database, we only need the
     // last location to create a Notification if the user navigates away from the app.
     private var currentLocation: Location? = null
-
 
     @Inject
     lateinit var locationPrefManager : LocationPrefManager
@@ -173,7 +171,6 @@ class ForegroundOnlyLocationService() : Service() {
         // NOTE: If this method is called due to a configuration change in MainActivity,
         // we do nothing.
         if (!configurationChange && locationPrefManager.getLocationTrackingPref()) {
-//        if (!configurationChange && SharedPreferenceUtil.getLocationTrackingPref(this)) {
             Log.d(TAG, "Start foreground service")
             val notification = generateNotification(currentLocation)
             startForeground(NOTIFICATION_ID, notification)
@@ -196,7 +193,6 @@ class ForegroundOnlyLocationService() : Service() {
     fun subscribeToLocationUpdates() {
         Log.d(TAG, "subscribeToLocationUpdates()")
 
-//        SharedPreferenceUtil.saveLocationTrackingPref(this, true)
         locationPrefManager.saveLocationTrackingPref(true)
 
         // Binding to this service doesn't actually trigger onStartCommand(). That is needed to
@@ -208,7 +204,6 @@ class ForegroundOnlyLocationService() : Service() {
             fusedLocationProviderClient.requestLocationUpdates(
                     locationRequest, locationCallback, Looper.myLooper())
         } catch (unlikely: SecurityException) {
-//            SharedPreferenceUtil.saveLocationTrackingPref(this, false)
             locationPrefManager.saveLocationTrackingPref(false)
             Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
         }
@@ -218,7 +213,6 @@ class ForegroundOnlyLocationService() : Service() {
         Log.d(TAG, "unsubscribeToLocationUpdates()")
 
         try {
-            // TODO: Step 1.6, Unsubscribe to location changes.
             val removeTask = fusedLocationProviderClient.removeLocationUpdates(locationCallback)
             removeTask.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -229,11 +223,9 @@ class ForegroundOnlyLocationService() : Service() {
                 }
             }
 
-//            SharedPreferenceUtil.saveLocationTrackingPref(this, false)
             locationPrefManager.saveLocationTrackingPref(false)
 
         } catch (unlikely: SecurityException) {
-//            SharedPreferenceUtil.saveLocationTrackingPref(this, true)
             locationPrefManager.saveLocationTrackingPref(true)
             Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
         }

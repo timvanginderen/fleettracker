@@ -16,7 +16,4 @@ class HomeViewModel @Inject constructor(private var authPrefManager: AuthPrefMan
         return locationPrefManager.getLocationTrackingPref()
     }
 
-    fun saveLocationTrackingPref() {
-
-    }
 }
